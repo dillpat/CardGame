@@ -1,4 +1,5 @@
 package cardGames;
+import java.io.IOException;
 import java.util.Scanner;
 
 import org.junit.Test;
@@ -13,21 +14,23 @@ public class CardGame {
 	}
 	
 	@Test
-	public void testCardGame() {
+	public void testCardGame() throws IOException {
     //public static void main(String[] args) {
         
-        // ask the user for the number of players
+        // Ask the user for the number of players
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number of players:");
         int numPlayers = sc.nextInt();
-        sc.close();
-
-        // generate an array of players and an array of decks of 
+        
+        
+        // Loads and validate card pack
+        Pack pack = new Pack();
+        pack.loadPack();
+        
+        // Generate an array of players and an array of decks of 
         // the correct size
         players = new Player[numPlayers];
         decks = new Deck[numPlayers];
-
-        Pack pack = new Pack(numPlayers);
 
         // Generate the player decks and add them to the list
         for (int i = 0; i < numPlayers; i++) {
