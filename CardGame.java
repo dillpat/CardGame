@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.util.Scanner;
-
-//import org.junit.Test;
+import org.junit.Test;
 
 public class CardGame {
 
@@ -12,9 +11,9 @@ public class CardGame {
 		// TODO Auto-generated constructor stub
 	}
 	
-	//@Test
-	//public void testCardGame() throws IOException {
-    public static void main(String[] args) {
+	@Test
+	public void testCardGame() throws IOException {
+    //public static void main(String[] args) {
         
         // Ask the user for the number of players
         Scanner sc = new Scanner(System.in);
@@ -40,27 +39,31 @@ public class CardGame {
             Deck newDeck = new Deck(i);
             decks[i] = newDeck;
         }
-
+        System.out.println("Cards.size" + pack.cards.size());
         // Generate the players and add them to the list
         for (int i = 0; i < numPlayers; i++) {
-            Player newPlayer = new Player(i);
+            Player newPlayer = new Player(i+1);
             players[i] = newPlayer;
         }
-
+        System.out.println("Cards.size" + pack.cards.size());
         // Distribute 4 cards to each player using the round robin method
         for (int i = 0; i < numPlayers*4; i++) {
         	Player p = players[i%numPlayers];
         	p.addCardToHand(pack.getCard());        			
         }
-        
+        System.out.println("Cards.size" + pack.cards.size());
+        int restOfCards = pack.cards.size();
         // Distribute remaining cards to the decks using round robin method
-        for (int i = 0; i < pack.cards.size(); i++) {
-            Deck d = decks[i % numPlayers];
+        for (int i = 0; i < restOfCards; i++) {
+            Deck d = decks[i%numPlayers];
             d.addCard(pack.getCard());
         }
+        System.out.println("Cards.size" + pack.cards.size());
+        /*
         for (Deck d : decks) {
             d.printDeck();
         }
+        */
         
         // Create the player circle/ring
         for (int i = 0; i < numPlayers; i++) {
@@ -75,13 +78,18 @@ public class CardGame {
                 players[i].setPutDeck(decks[i + 1]);
             }
         }
-        
+        for (Player player : players) {
+        	System.out.print(player.getPlayerNumber() + ": ");
+        	player.printHand();
+        }
+        for (Deck deck: decks) {
+        	System.out.print(deck.getDeckNumber() + ": ");
+        	deck.printDeck();
+        }
         // Play the game
         Boolean winnerFound = false;
         while (winnerFound == false) {
             for (Player player : players) {
-                System.out.print(player.getPlayerNumber());
-                player.printHand();
                 if (player.checkWin()) {
                     winnerFound = true;
                     System.out.println("Winner is: " + String.valueOf(player.getPlayerNumber()));
@@ -90,6 +98,10 @@ public class CardGame {
                     player.drawCard();
                 }
             }
+        }
+        for (Player player : players) {
+        	System.out.print(player.getPlayerNumber() + ": ");
+        	player.printHand();
         }
         
         System.out.println("Finish Main Function");

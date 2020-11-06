@@ -2,6 +2,7 @@ public class Player {
     private int playerNumber;
     private Card[] hand;
     private int cardCounter;
+    private int cardTracker;
     private Deck pullDeck;
     private Deck putDeck;
 
@@ -9,6 +10,7 @@ public class Player {
         this.playerNumber = playerNumber;
         this.hand = new Card[4];
         this.cardCounter = 0;
+        this.cardTracker = 0;
     }
     
     public void setPullDeck(Deck deck) {
@@ -25,12 +27,14 @@ public class Player {
 
     public void drawCard() {
         Card newCard = this.pullDeck.getCard();
-        int value = newCard.readValue();
-        if (this.playerNumber == value) {
-            int discardLocation = findDiscardCardLocation();
-            Card discard = hand[discardLocation];
+        int discardLocation = findDiscardCardLocation(playerNumber);
+        if (discardLocation > -1) {
+        	Card discard = hand[discardLocation];
             hand[discardLocation] = newCard;
             discardCard(discard);
+        }
+        else {
+        	this.pullDeck.addCard(newCard);
         }
     }
 
@@ -38,12 +42,15 @@ public class Player {
         this.putDeck.addCard(card);
     }
 
-    public int findDiscardCardLocation() {
+    public int findDiscardCardLocation(int playerNumber) {    	
+    	int swapCard = cardTracker;
         for (int i = 0; i < 4; i++) {
-            Card card = hand[i];
+            Card card = hand[swapCard];
             if (card.readValue() != playerNumber) {
-                return i;
+            	cardTracker = (swapCard + 1) % 4;
+                return swapCard;
             }
+            swapCard = (swapCard + 1) % 4;
         }
         return -1;
     }
