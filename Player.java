@@ -35,7 +35,7 @@ public class Player {
     }
 
     public void discardCard(Card card) {
-        this.pullDeck.addCard(card);
+        this.putDeck.addCard(card);
     }
 
     public int findDiscardCardLocation() {
