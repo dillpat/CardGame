@@ -2,6 +2,7 @@ public class Player {
     private int playerNumber;
     private Card[] hand;
     private int cardCounter;
+    private int cardTracker;
     private Deck pullDeck;
     private Deck putDeck;
 
@@ -10,6 +11,7 @@ public class Player {
         this.playerNumber = playerNumber;
         this.hand = new Card[4];
         this.cardCounter = 0;
+        this.cardTracker = 0;
     }
     
     // Set the deck that the player will draw from
@@ -28,25 +30,26 @@ public class Player {
 
     // Draw a card from the deck
     public void drawCard() {
-
         // get a card from the pull deck
         Card newCard = this.pullDeck.getCard();
         int value = newCard.readValue();
-
+      
         // log that the player has drawn
         System.out.println("Player " + String.valueOf(playerNumber) + " draws a " + String.valueOf(value)
                 + " from deck " + String.valueOf(playerNumber));
-
-        // get the card to be discarded
-        int discardLocation = findDiscardCardLocation();
-        Card discard = hand[discardLocation];
-        hand[discardLocation] = newCard;
-
-        // discard it
-        discardCard(discard);
+      
+        int discardLocation = findDiscardCardLocation(playerNumber);
+        if (discardLocation > -1) {
+        	Card discard = hand[discardLocation];
+            hand[discardLocation] = newCard;
+            discardCard(discard);
+        }
+        else {
+        	this.pullDeck.addCard(newCard);
+        }
     }
 
-    // dsicard a given card
+    // discard a given card
     public void discardCard(Card card) {
         // put it in the discard deck
         this.putDeck.addCard(card);
@@ -62,12 +65,15 @@ public class Player {
     }
 
     // find the location of the first card to be discarded
-    public int findDiscardCardLocation() {
+    public int findDiscardCardLocation() { 	
+    	  int swapCard = cardTracker;
         for (int i = 0; i < 4; i++) {
-            Card card = hand[i];
+            Card card = hand[swapCard];
             if (card.readValue() != playerNumber) {
-                return i;
+            	cardTracker = (swapCard + 1) % 4;
+                return swapCard;
             }
+            swapCard = (swapCard + 1) % 4;
         }
         return -1;
     }

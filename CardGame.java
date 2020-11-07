@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.Scanner;
+
 //import org.junit.Test;
+
 
 public class CardGame {
 
@@ -11,9 +13,9 @@ public class CardGame {
 		// TODO Auto-generated constructor stub
 	}
 	
-	//@Test
-	//public void testCardGame() throws IOException {
-    public static void main(String[] args) {
+	@Test
+	public void testCardGame() throws IOException {
+    //public static void main(String[] args) {
         
         // Ask the user for the number of players
         Scanner sc = new Scanner(System.in);
@@ -59,7 +61,6 @@ public class CardGame {
             d.addCard(pack.getCard());
         }
         System.out.println("Cards.size" + pack.cards.size());
-
         
         // Create the player circle/ring
         for (int i = 0; i < numPlayers; i++) {
@@ -95,6 +96,10 @@ public class CardGame {
                     player.drawCard();
                 }
             }
+        }
+        for (Player player : players) {
+        	System.out.print(player.getPlayerNumber() + ": ");
+        	player.printHand();
         }
         
         // print the final player hands
