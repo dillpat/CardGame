@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.Scanner;
-import org.junit.Test;
+
+//import org.junit.Test;
+
 
 public class CardGame {
 
@@ -36,7 +38,7 @@ public class CardGame {
 
         // Generate the player decks and add them to the list
         for (int i = 0; i < numPlayers; i++) {
-            Deck newDeck = new Deck(i);
+            Deck newDeck = new Deck(i+1);
             decks[i] = newDeck;
         }
         System.out.println("Cards.size" + pack.cards.size());
@@ -59,37 +61,33 @@ public class CardGame {
             d.addCard(pack.getCard());
         }
         System.out.println("Cards.size" + pack.cards.size());
-        /*
-        for (Deck d : decks) {
-            d.printDeck();
-        }
-        */
         
         // Create the player circle/ring
         for (int i = 0; i < numPlayers; i++) {
             // Assign players pull deck
             players[i].setPullDeck(decks[i]);
+            players[i].setPutDeck(decks[(i + 1) % numPlayers]);
+        }
 
-            // Assign players put deck
-            if (i == numPlayers - 1) {
-                // Last player puts cards to first players deck
-                players[i].setPutDeck(decks[0]);
-            } else {
-                players[i].setPutDeck(decks[i + 1]);
-            }
-        }
+        // print out all the players' hands
         for (Player player : players) {
-        	System.out.print(player.getPlayerNumber() + ": ");
-        	player.printHand();
+            System.out.print(player.getPlayerNumber() + ": ");
+            player.printHand();
         }
+        
+        // print out all the decks
         for (Deck deck: decks) {
         	System.out.print(deck.getDeckNumber() + ": ");
         	deck.printDeck();
         }
         // Play the game
         Boolean winnerFound = false;
+        
+        // while nobody has won
         while (winnerFound == false) {
+            // each player check fir a win, and draws a card if not
             for (Player player : players) {
+                decks[player.getPlayerNumber() - 1].printDeck();
                 if (player.checkWin()) {
                     winnerFound = true;
                     System.out.println("Winner is: " + String.valueOf(player.getPlayerNumber()));
@@ -101,6 +99,12 @@ public class CardGame {
         }
         for (Player player : players) {
         	System.out.print(player.getPlayerNumber() + ": ");
+        	player.printHand();
+        }
+        
+        // print the final player hands
+        for (Player player : players) {
+            System.out.print(player.getPlayerNumber() + " Final: ");
         	player.printHand();
         }
         

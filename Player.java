@@ -6,6 +6,7 @@ public class Player {
     private Deck pullDeck;
     private Deck putDeck;
 
+    // Constructor. Initialise attributes 
     public Player(int playerNumber) {
         this.playerNumber = playerNumber;
         this.hand = new Card[4];
@@ -13,10 +14,12 @@ public class Player {
         this.cardTracker = 0;
     }
     
+    // Set the deck that the player will draw from
     public void setPullDeck(Deck deck) {
-    	this.pullDeck = deck;
+        this.pullDeck = deck;
     }
     
+    // Set the deck that the player will discard too
     public void setPutDeck(Deck deck) {
     	this.putDeck = deck;
     }
@@ -25,8 +28,16 @@ public class Player {
         return this.playerNumber;
     }
 
+    // Draw a card from the deck
     public void drawCard() {
+        // get a card from the pull deck
         Card newCard = this.pullDeck.getCard();
+        int value = newCard.readValue();
+      
+        // log that the player has drawn
+        System.out.println("Player " + String.valueOf(playerNumber) + " draws a " + String.valueOf(value)
+                + " from deck " + String.valueOf(playerNumber));
+      
         int discardLocation = findDiscardCardLocation(playerNumber);
         if (discardLocation > -1) {
         	Card discard = hand[discardLocation];
@@ -38,12 +49,24 @@ public class Player {
         }
     }
 
+    // discard a given card
     public void discardCard(Card card) {
+        // put it in the discard deck
         this.putDeck.addCard(card);
+
+        // log that it is discarded
+        System.out.println("Player " + String.valueOf(playerNumber) + " discards a " + String.valueOf(card.readValue())
+                + " to deck " + String.valueOf(putDeck.getDeckNumber()));
     }
 
-    public int findDiscardCardLocation(int playerNumber) {    	
-    	int swapCard = cardTracker;
+    // get the put deck
+    public Deck getPutDeck() {
+        return putDeck;
+    }
+
+    // find the location of the first card to be discarded
+    public int findDiscardCardLocation() { 	
+    	  int swapCard = cardTracker;
         for (int i = 0; i < 4; i++) {
             Card card = hand[swapCard];
             if (card.readValue() != playerNumber) {
@@ -55,6 +78,7 @@ public class Player {
         return -1;
     }
 
+    // check the players hand and see if they have won
     public boolean checkWin() {
         int target = hand[0].readValue();
         for (int i = 1; i < 4; i++) {
@@ -65,23 +89,15 @@ public class Player {
         return true;
     }
     
+    // add a card to the players hand
     public void addCardToHand(Card card) {
     	if (cardCounter < 4) {
     		this.hand[cardCounter] = card;
     		this.cardCounter++;
     	}
     }
- 
-/*
-    private Card[] generateHand() {
-        Card[] playerHand = new Card[4];
-        for (int i = 0; i < 4; i++) {
-            playerHand[i] = this.pack.getCard();
-        }
-        return playerHand;
-    }
-*/
 
+    
     public void printHand() {
         // just for testing, can be removed in final version
         for (Card c : hand) {

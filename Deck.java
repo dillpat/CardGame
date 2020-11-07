@@ -3,21 +3,24 @@ import java.util.LinkedList;
 public class Deck {
 
     private int deckNumber;  
-    //private Pack pack;
     private LinkedList<Card> deck = new LinkedList<>();
 
 
     public Deck(int deckNumber) {
         this.deckNumber = deckNumber;
     }
+  
+    // return the deck number
     public int getDeckNumber() {
-    	return deckNumber;
+        return deckNumber;
     }
     
+    // add a card to the back of the deck
     public void addCard(Card card) {
         deck.addLast(card);
     }
 
+    // get the top card from the deck
     public Card getCard() {
         return deck.removeFirst();
     }
