@@ -23,13 +23,17 @@ public class Pack {
 		}
 	}
 	
+	public Pack() {
+	}
+	
 	// get the name of the file to read and read it
 	public void loadPack() throws IOException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please enter location of pack to load: ");
 		String filename = sc.nextLine();
 		String fileLocation = new File("").getAbsolutePath();
-		filename = fileLocation + "\\cardgame\\CardGameFiles\\" + filename;
+		filename = fileLocation + "\\Card Packs\\" + filename;
+		System.out.println(filename + "filename");
 		this.readFile(filename);
 	}
 	

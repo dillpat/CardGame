@@ -1,9 +1,11 @@
-import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
+
 
 public class Deck {
 
     private int deckNumber;  
-    private LinkedList<Card> deck = new LinkedList<>();
+    private LinkedBlockingDeque<Card> deck = new LinkedBlockingDeque<>();
 
 
     public Deck(int deckNumber) {
@@ -17,19 +19,19 @@ public class Deck {
     
     // add a card to the back of the deck
     public void addCard(Card card) {
-        deck.addLast(card);
+        deck.add(card);
     }
 
     // get the top card from the deck
-    public Card getCard() {
-        return deck.removeFirst();
+    public Card getCard() throws InterruptedException {
+    	return deck.poll(10, TimeUnit.MILLISECONDS);
     }
-    
+
     public void printDeck() {
-        // just for testing, can be removed in final version
-        for (Card c : deck) {
-            System.out.print(String.valueOf(c.readValue()) + " ");
-        }
+    	// just for testing, can be removed in final version
+    	for (Card c : deck) {
+    		System.out.print(String.valueOf(c.readValue()) + " ");
+    	}
         System.out.println("");
     }
 }

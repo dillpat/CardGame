@@ -1,12 +1,12 @@
 import java.io.IOException;
 import java.util.Scanner;
-
-//import org.junit.Test;
+import org.junit.Test;
 
 
 public class CardGame {
 
     public static Player[] players;
+    public static Winner winnerId;
     public static Deck[] decks;
 
 	public CardGame() {
@@ -14,14 +14,16 @@ public class CardGame {
 	}
 	
 	@Test
-	public void testCardGame() throws IOException {
+	public void testCardGame() throws IOException, InterruptedException {
     //public static void main(String[] args) {
         
+		// Wining player's Id 
+		Winner winnerId = new Winner();
+		
         // Ask the user for the number of players
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the number of players:");
         int numPlayers = sc.nextInt();
-        
         
         // Loads and validate card pack
         Pack pack = new Pack();
@@ -44,7 +46,7 @@ public class CardGame {
         System.out.println("Cards.size" + pack.cards.size());
         // Generate the players and add them to the list
         for (int i = 0; i < numPlayers; i++) {
-            Player newPlayer = new Player(i+1);
+            Player newPlayer = new Player(i+1, winnerId);
             players[i] = newPlayer;
         }
         System.out.println("Cards.size" + pack.cards.size());
@@ -80,12 +82,12 @@ public class CardGame {
         	System.out.print(deck.getDeckNumber() + ": ");
         	deck.printDeck();
         }
-        // Play the game
+        /*
         Boolean winnerFound = false;
         
         // while nobody has won
         while (winnerFound == false) {
-            // each player check fir a win, and draws a card if not
+            // each player check first a win, and draws a card if not
             for (Player player : players) {
                 decks[player.getPlayerNumber() - 1].printDeck();
                 if (player.checkWin()) {
@@ -97,6 +99,18 @@ public class CardGame {
                 }
             }
         }
+        */
+        
+        // Start player threads
+        for (Player player : players) {
+        	player.start();
+        }
+        
+        // Main thread waits for players to finish 
+        for (Player player : players) {
+        	player.join();
+        }
+        
         for (Player player : players) {
         	System.out.print(player.getPlayerNumber() + ": ");
         	player.printHand();
@@ -104,8 +118,14 @@ public class CardGame {
         
         // print the final player hands
         for (Player player : players) {
-            System.out.print(player.getPlayerNumber() + " Final: ");
+            System.out.print("Player " + player.getPlayerNumber() + " Final Hand: ");
         	player.printHand();
+        }
+        
+        // print out all the decks
+        for (Deck deck: decks) {
+        	System.out.print("Deck" + deck.getDeckNumber() + " contents: ");
+        	deck.printDeck();
         }
         
         System.out.println("Finish Main Function");
