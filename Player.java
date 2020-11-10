@@ -150,21 +150,22 @@ public class Player implements Runnable {
     @Override
     public void run() {
         while (!this.winnerFound) {
-            try {
-                if (checkWin()) {
-                    winnerFound = true;
-                    System.out.println("Winner is " + playerNumber);
-                    Thread.interrupted();
+            synchronized (this) {
+                try {
+                    if (checkWin()) {
+                        winnerFound = true;
+                        break;
+                    } else if (this.winnerFound) {
+                        break;
+                    }
+                    drawCard();
+                    // wait for the 
+
+                    this.wait();
+
+                } catch (InterruptedException e) {
                     break;
                 }
-                drawCard();
-                synchronized (this) {
-                    System.out.println("Waiting");
-                    this.wait();
-                } //Thread.sleep(10);
-            } catch (InterruptedException e) {
-                System.out.println("Player " + String.valueOf(playerNumber) + " exits.");
-                break;
             }
         }
     }
