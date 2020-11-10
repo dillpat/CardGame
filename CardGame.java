@@ -1,6 +1,9 @@
 //package cardGame;
 import java.io.IOException;
 import java.util.Scanner;
+
+import cardGames.Player;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
@@ -96,6 +99,7 @@ public class CardGame {
             // check whether each player has won.
             for (Player p : players) {
                 if (p.checkWin()) {
+                	System.out.println("Player " + p.getPlayerNumber() + ": Has won");
                     // if they have, write this to the file, set the winnerFound flag to true...
                     String fileLocation = new File("").getAbsolutePath();
                     try {
@@ -142,7 +146,7 @@ public class CardGame {
         for (Player player : players) {
             try {
                 FileWriter w = player.getWriter();
-                w.write(player.getPlayerNumber() + " Final Hand: " + player.toString() + "\n");
+                w.write("Player " + player.getPlayerNumber() + " Final Hand: " + player.toString() + "\n");
                 w.flush();
             } catch (IOException e) {
                 e.printStackTrace();
