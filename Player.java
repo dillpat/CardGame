@@ -43,6 +43,9 @@ public class Player implements Runnable {
 
             // get a card from the pull deck
             Card newCard = this.pullDeck.getCard();
+            if (newCard == null) {
+            	return;
+            }
             int value = newCard.readValue();
 
             // log that the player has drawn

@@ -21,6 +21,7 @@ public class CardTest {
 	public void tearDown () {
 		testCard = null;
 	}
+	
 	@Test
 	public void testNoCardValue() {
 		assertFalse("Has a value ", testCard.readValue() == 0);
