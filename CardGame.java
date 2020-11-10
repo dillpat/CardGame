@@ -48,7 +48,7 @@ public class CardGame {
         for (int i = 0; i < numPlayers; i++) {
             try {
             	String fileLocation = new File("").getAbsolutePath();
-            	String filename = fileLocation + "\\src\\cardGame\\CardGameFiles\\player" + (i+1) + "_output.txt";
+            	String filename = fileLocation + "\\CardGameFiles\\player" + (i+1) + "_output.txt";
                 FileWriter playerWriter = new FileWriter(filename);
                 Player newPlayer = new Player(i + 1, filename, playerWriter);
                 players[i] = newPlayer;
@@ -153,7 +153,7 @@ public class CardGame {
         String fileLocation = new File("").getAbsolutePath();
         for (Deck d : decks) {
             try {
-                String filename = fileLocation + "\\src\\cardGame\\CardGameFiles\\deck" + d.getDeckNumber() + "_ouput.txt";
+                String filename = fileLocation + "\\CardGameFiles\\deck" + d.getDeckNumber() + "_ouput.txt";
                 FileWriter deckWriter = new FileWriter(filename);
                 String deckString = "";
                 for (Card c : d.getDeck()) {
