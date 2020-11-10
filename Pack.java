@@ -1,3 +1,4 @@
+//package cardGame;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Random; // Only imported temporarily as a substitue for getting the card values from a file
@@ -34,7 +35,10 @@ public class Pack {
 		System.out.println("Please enter location of pack to load: ");
 		String filename = sc.nextLine();
 		String fileLocation = new File("").getAbsolutePath();
-		filename = fileLocation + "\\CardGameFiles\\" + filename;
+    
+		filename = fileLocation + "\\Card Packs\\" + filename;
+		System.out.println(filename + "filename");
+
 		this.readFile(filename);
 	}
 	
