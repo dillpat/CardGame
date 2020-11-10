@@ -1,17 +1,17 @@
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
-
+//package cardGame;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Deck {
 
     private int deckNumber;  
-    private LinkedBlockingDeque<Card> deck = new LinkedBlockingDeque<>();
+    private Queue<Card> deck = new LinkedList<>();
 
 
     public Deck(int deckNumber) {
         this.deckNumber = deckNumber;
     }
-  
+
     // return the deck number
     public int getDeckNumber() {
         return deckNumber;
@@ -23,15 +23,29 @@ public class Deck {
     }
 
     // get the top card from the deck
-    public Card getCard() throws InterruptedException {
-    	return deck.poll(10, TimeUnit.MILLISECONDS);
+    public Card getCard() {
+        return deck.remove();
     }
 
+    public int[] display() {
+        int[] values = new int[deck.size()];
+        Queue<Card> duplicate = deck;
+
+        for (int i = 0; i < deck.size(); i++) {
+            values[i] = duplicate.remove().readValue();
+        }
+        return values;
+    }
+    
+    public Queue<Card> getDeck() {
+        return deck;
+    }
+    
     public void printDeck() {
-    	// just for testing, can be removed in final version
-    	for (Card c : deck) {
-    		System.out.print(String.valueOf(c.readValue()) + " ");
-    	}
+        // just for testing, can be removed in final version
+        for (Card c : deck) {
+            System.out.print(String.valueOf(c.readValue()) + " ");
+        }
         System.out.println("");
     }
 }

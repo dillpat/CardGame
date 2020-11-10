@@ -1,3 +1,4 @@
+//package cardGame;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Random; // Only imported temporarily as a substitue for getting the card values from a file
@@ -13,7 +14,12 @@ public class Pack {
 	LinkedList<Card> cards = new LinkedList<>();
 	
 	// test data delete after 
-	private int[] test = new int[] {1,3,4,4,1,3,2,2,3,3,2,4,1,1,2,4,3,2,1,2,3,4,2,3,2,2,4,3,2,1,2,3};
+	private int[] test = new int[] { 1, 3, 4, 4, 1, 3, 2, 2, 3, 3, 2, 4, 1, 1, 2, 4, 3, 2, 1, 2, 3, 4, 2, 3, 2, 2, 4, 3,
+			2, 1, 2, 3 };
+	
+	public Pack() {
+
+	}
 	
 	public Pack(int num) {
 		// get cards from text file
@@ -23,16 +29,13 @@ public class Pack {
 		}
 	}
 	
-	public Pack() {
-	}
-	
 	// get the name of the file to read and read it
 	public void loadPack() throws IOException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please enter location of pack to load: ");
 		String filename = sc.nextLine();
 		String fileLocation = new File("").getAbsolutePath();
-		filename = fileLocation + "\\Card Packs\\" + filename;
+		filename = fileLocation + "\\src\\cardGame\\Card Packs\\" + filename;
 		System.out.println(filename + "filename");
 		this.readFile(filename);
 	}
@@ -45,7 +48,6 @@ public class Pack {
 			while (myReader.hasNextLine()) {
 				try {
 					int cardValue = myReader.nextInt();
-					System.out.println(cardValue);
 					Card newCard = new Card(cardValue);
 					this.cards.add(newCard);
 				} catch (NoSuchElementException e) {
@@ -63,7 +65,6 @@ public class Pack {
 			}
 
 		}
-		System.out.println(this.cards);
 	}
 	
 	// get a card from the top of the pack
