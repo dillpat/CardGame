@@ -1,4 +1,3 @@
-//package cardGame;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
@@ -14,7 +13,7 @@ public class Player implements Runnable {
     private Deck putDeck;
     private String filename;
     private FileWriter writer;
-    private boolean winnerFound = false;
+    private Boolean winnerFound = false;
 
     // Constructor. Initialise attributes 
 
@@ -42,9 +41,9 @@ public class Player implements Runnable {
     public void drawCard() {
 
             // get a card from the pull deck
-            Card newCard = this.pullDeck.getCard();
+    		Card newCard = this.pullDeck.getCard();   		
             if (newCard == null) {
-            	return;
+                return;
             }
             int value = newCard.readValue();
 
@@ -144,31 +143,28 @@ public class Player implements Runnable {
         System.out.println("");
     }
 
-    public void setWinnerFound(boolean winnerFound) {
+    public void setWinnerFound(Boolean winnerFound) {
         this.winnerFound = winnerFound;
     }
 
-    // run  method, if the player has not won, draw a card and proceed
-    // with the turn
     @Override
     public void run() {
         while (!this.winnerFound) {
-            synchronized (this) {
-                try {
-                    if (checkWin()) {
-                        winnerFound = true;
-                        break;
-                    } else if (this.winnerFound) {
-                        break;
-                    }
-                    drawCard();
-                    // wait for the 
-
-                    this.wait();
-
-                } catch (InterruptedException e) {
+            try {
+                if (checkWin()) {
+                    winnerFound = true;
+                    System.out.println("Winner is " + playerNumber);
+                    Thread.interrupted();
                     break;
                 }
+                drawCard();
+                synchronized (this) {
+                    System.out.println("Waiting");
+                    this.wait();
+                } //Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println("Player " + String.valueOf(playerNumber) + " exits.");
+                break;
             }
         }
     }

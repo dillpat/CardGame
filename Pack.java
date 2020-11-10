@@ -35,6 +35,7 @@ public class Pack {
 		System.out.println("Please enter location of pack to load: ");
 		String filename = sc.nextLine();
 		String fileLocation = new File("").getAbsolutePath();
+    
 		filename = fileLocation + "\\Card Packs\\" + filename;
 		this.readFile(filename);
 	}

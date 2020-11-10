@@ -1,9 +1,6 @@
 //package cardGame;
 import java.io.IOException;
 import java.util.Scanner;
-
-import cardGames.Player;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
@@ -14,10 +11,6 @@ public class CardGame {
 
     public static Player[] players;
     public static Deck[] decks;
-
-    public CardGame() {
-        // TODO Auto-generated constructor stub
-    }
     
     public static void main(String[] args) {
 
@@ -79,12 +72,12 @@ public class CardGame {
             p.setPullDeck(decks[i]);
             p.setPutDeck(decks[(i + 1) % numPlayers]);
             try {
-                p.getWriter().write("Initial Hand: " + p.toString() + "\n");
+                p.getWriter().write("Player " + p.getPlayerNumber() + " initial Hand " + p.toString() + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+        
         // create the player threads
         Thread[] threads = new Thread[numPlayers];
         for (int i = 0; i < numPlayers; i++) {
@@ -99,11 +92,10 @@ public class CardGame {
             // check whether each player has won.
             for (Player p : players) {
                 if (p.checkWin()) {
-                	System.out.println("Player " + p.getPlayerNumber() + ": Has won");
                     // if they have, write this to the file, set the winnerFound flag to true...
                     String fileLocation = new File("").getAbsolutePath();
                     try {
-                        p.getWriter().write("Player " + p.getPlayerNumber() + " wins.");
+                    	System.out.println("Player " + p.getPlayerNumber() + " wins\n");
                         winnerFound = true;
                         // for each player, write that the player has been informed to stop
                         for (Player p1 : players) {
@@ -146,6 +138,8 @@ public class CardGame {
         for (Player player : players) {
             try {
                 FileWriter w = player.getWriter();
+                w.write("Player " + player.getPlayerNumber() + "exits\n");
+                w.write("Player " + player.getPlayerNumber() + "wins\n");
                 w.write("Player " + player.getPlayerNumber() + " Final Hand: " + player.toString() + "\n");
                 w.flush();
             } catch (IOException e) {
