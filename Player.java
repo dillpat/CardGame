@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Player implements Runnable {
     private int playerNumber;
@@ -40,28 +41,32 @@ public class Player implements Runnable {
     // Draw a card from the deck
     public void drawCard() {
 
-            // get a card from the pull deck
-    		Card newCard = this.pullDeck.getCard();   		
-            if (newCard == null) {
-                return;
-            }
-            int value = newCard.readValue();
+        // get a card from the pull deck
+        Card newCard;
+        int value;
+        try {
+            newCard = this.pullDeck.getCard();   		
+            value = newCard.readValue();
+        } catch (NoSuchElementException e) {
+            newCard = null;
+            return;
+        }
 
-            // log that the player has drawn
-            try {
-                writer.write("Player " + String.valueOf(playerNumber) + " draws a " + String.valueOf(value)
-                        + " from deck " + String.valueOf(playerNumber) + "\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // log that the player has drawn
+        try {
+            writer.write("Player " + String.valueOf(playerNumber) + " draws a " + String.valueOf(value)
+                    + " from deck " + String.valueOf(playerNumber) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            // get the card to be discarded
-            int discardLocation = findDiscardCardLocation();
-            Card discard = hand[discardLocation];
-            hand[discardLocation] = newCard;
+        // get the card to be discarded
+        int discardLocation = findDiscardCardLocation();
+        Card discard = hand[discardLocation];
+        hand[discardLocation] = newCard;
 
-            // discard it
-            discardCard(discard);
+        // discard it
+        discardCard(discard);
         
     }
 
@@ -154,6 +159,7 @@ public class Player implements Runnable {
                 try {
                     if (checkWin()) {
                         winnerFound = true;
+                        writer.write("Player " + playerNumber + " wins\n");
                         break;
                     } else if (this.winnerFound) {
                         break;
@@ -163,10 +169,17 @@ public class Player implements Runnable {
 
                     this.wait();
 
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | IOException e) {
                     break;
                 }
             }
         }
+
+        try {
+            writer.write("Player " + playerNumber + " exits\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
     }
 }
+

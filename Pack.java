@@ -1,47 +1,31 @@
-//package cardGame;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.NoSuchElementException;
 import java.util.Random; // Only imported temporarily as a substitue for getting the card values from a file
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 
-//import org.junit.Test;
-	  
-	  
 public class Pack {
-	LinkedList<Card> cards = new LinkedList<>();
-	
-	// test data delete after 
-	private int[] test = new int[] { 1, 3, 4, 4, 1, 3, 2, 2, 3, 3, 2, 4, 1, 1, 2, 4, 3, 2, 1, 2, 3, 4, 2, 3, 2, 2, 4, 3,
-			2, 1, 2, 3 };
-	
-	public Pack() {
-
-	}
+	Queue<Card> cards = new LinkedList<>();
+	private int length;	
 	
 	public Pack(int num) {
-		// get cards from text file
-		for (int i = 0; i < test.length; i++) {
-			Card newCard = new Card(test[i]);
-			this.cards.add(newCard);
-		}
+		this.length = num * 8;
 	}
 	
 	// get the name of the file to read and read it
-	public void loadPack() throws IOException {
+	public void loadPack() throws IOException, InvalidPackException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Please enter location of pack to load: ");
 		String filename = sc.nextLine();
-		String fileLocation = new File("").getAbsolutePath();
-		filename = fileLocation + "\\Card Packs\\" + filename;
-		System.out.println(filename + " : xyz");
 		this.readFile(filename);
 	}
 	
     // load the contents of the text file into the pack
-	public void readFile(String filename) {
+	public void readFile(String filename) throws InvalidPackException {
 		try {
 			File myObj = new File(filename);
 			Scanner myReader = new Scanner(myObj);
@@ -50,32 +34,38 @@ public class Pack {
 					int cardValue = myReader.nextInt();
 					Card newCard = new Card(cardValue);
 					this.cards.add(newCard);
-				} catch (NoSuchElementException e) {
-					break;
+				} catch (NoSuchElementException | InvalidCardException e) {
+					if (e instanceof InvalidCardException) {
+						throw new InvalidPackException();
+					} else {
+						break;
+					}
 				}
-
+			}
+			if (cards.size() != length) {
+				throw new InvalidPackException();
 			}
 			myReader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("The given file name was not recognised");
-
-			for (int i = 0; i < test.length; i++) {
-				Card newCard = new Card(test[i]);
-				this.cards.add(newCard);
-			}
-
+			throw new InvalidPackException();
 		}
 	}
 	
 	// get a card from the top of the pack
-	public Card getCard() {
-		Card card = cards.removeFirst();
-		return card;
+	public Card getCard() throws NoSuchElementException{
+		if (cards.size() > 0) {
+			Card card = cards.remove();
+			return card;
+		} else {
+			throw new NoSuchElementException();
+		}
+		
 	}
 	
 	// add a card to the back of the pack
 	public void addCard(Card card) {
-		this.cards.addLast(card);
+		this.cards.add(card);
 	}
 
 }

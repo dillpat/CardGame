@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Deck {
@@ -26,8 +27,12 @@ public class Deck {
     }
 
     // get the top card from the deck
-    public Card getCard() {
-        return deck.poll();
+    public Card getCard() throws NoSuchElementException{
+        if (deck.size() > 0) {
+            return deck.poll();
+        } else {
+            throw new NoSuchElementException();
+        }
     }
     
     
