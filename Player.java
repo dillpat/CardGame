@@ -174,6 +174,7 @@ public class Player implements Runnable {
                 }
             }
         }
+
         try {
             writer.write("Player " + playerNumber + " exits\n");
         } catch (IOException e) {
@@ -181,3 +182,4 @@ public class Player implements Runnable {
         }    
     }
 }
+
